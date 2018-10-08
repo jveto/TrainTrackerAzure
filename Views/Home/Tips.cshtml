@@ -1,0 +1,65 @@
+<!-- navbar -->
+<div class="navbar">
+    <nav class="nav__mobile"></nav>
+    <div class="container">
+        <div class="navbar__inner">
+            <a href="/" style="display: flex; align-items: center;" class="navbar__logo"><img height="42px" src="~/images/logo.svg">TrainTracker</a>
+            <nav class="navbar__menu">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/Dashboard">Dashboard</a></li>
+                    <li><a href="/Tips">Tips</a></li>
+                </ul>
+            </nav>
+            <div class="navbar__menu-mob"><a href="" id='toggle'><svg role="img" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 448 512">
+                        <path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+                            class=""></path>
+                    </svg></a></div>
+        </div>
+    </div>
+</div>
+<!-- Authentication pages -->
+<div class="auth" style="height: 100vh;">
+    <div class="container">
+        <div class="auth__inner">
+            <div class="auth__media">
+                <img src="~/images/chat.svg">
+            </div>
+            <div class="auth__auth">
+                <h1 class="auth__title">Leave a tip for us!</h1>
+                <p>Fill in your name and comment to tip.</p>
+                @model Tip
+                <form method='post' asp-action="PostTip" asp-controller="Home" role="presentation" class="form">
+                    <label>Name</label>
+                    <input type="text" asp-for="Name" placeholder="Humpty Dumpty">
+                    <label>Comment</label>
+                    <input type="text" asp-for="Comment" placeholder="More trains please" autocomplete="off">
+                    <button type='submit' class="button button__accent">Post</button>
+                    <h6 class="left-align">Help us improve TrainTracker. 😉</h6>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Comment pages -->
+<div class="landing__section">
+    <div class="container">
+        <div class="expanded__inner">
+            <div>
+                <h2 class="expanded__title">Comments</h2>
+                @{
+                    foreach (Tip tip in ViewBag.Tips) {
+                        <div class = "tip" style="width: 100%; max-width: 100%;">
+                            <div class="tip-head" style="display: flex; align-items: center;">
+                                <img src='~/images/profile.svg' height='42px'> 
+                                <h3 style="display: inline; margin: 0; margin-left: 5px;">@tip.Name - <span style="font-size: 16px;">@tip.Date.ToString("MMMM dd, yyyy h:mm tt")</span></h3>
+                            </div>
+                            <p style="margin-left: 40px; max-width: 80vw; word-wrap: break-word;">@tip.Comment</p>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

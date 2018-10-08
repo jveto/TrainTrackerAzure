@@ -1,0 +1,684 @@
+
+<div class="navbar">
+	<nav class="nav__mobile"></nav>
+	<div class="container">
+		<div class="navbar__inner">
+			<a href="/" style="display: flex; align-items: center;" class="navbar__logo"><img height="42px" src="~/images/logo.svg">TrainTracker</a>
+			<nav class="navbar__menu">
+				<ul>
+					<li><a href="/">Home</a></li>
+					<li><a href="/Dashboard">Dashboard</a></li>
+					<li><a href="/Tips">Tips</a></li>
+				</ul>
+			</nav>
+			<div class="navbar__menu-mob"><a href="" id='toggle'><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+						<path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+						 class=""></path>
+					</svg></a></div>
+		</div>
+	</div>
+</div>
+
+<!-- Page content -->
+<div class="app app-custom">
+	<div class="container-dashboard">
+		<div class="app__inner" style="width: 100%;">
+			<div class="app__menu">
+				<div id='LineSelect'>
+					<div class="vMenu vMenuTop">
+						<p class="etched-text">Display: <span style="color: darkslategray;">{{ line }}</span></p>
+					</div>
+					
+					
+				</div>
+                <h4 style="darkslategray">Route information for Train #@ViewBag.id</h4>
+				<table class='table table-striped'>
+                    <thead>
+                        <th style="text-align: left;">Station</th>
+                        <th style="text-align: left;">Arrival</th>
+                        <th style="text-align: left;">Destination</th>
+                    </thead>
+                    <tbody id="trains">
+                    
+                    </tbody>
+                </table><br>
+                <button id="atrain" class="trainbtn" style="width: 100px; margin-right: 10px;">Map Train</button>
+				<a href="/dashboard"><button type="submit" class="trainbtn" style="width: 100px;">Back</button></a>
+				<ul class="vMenu vMenuCustom">
+					<p class="etched-text" style="color: darkslategray;">Magnify:</p>
+					<li>
+						<input checked type="checkbox" id="Magnify" />
+						<label for="Magnify">Enable/Disable</label>
+					</li>
+				</ul>
+			</div>
+			<div class="app__main">
+				<div class="vMenu vMenuTop" style="width: 100%;">
+					<marquee class="etched-text" style="color: red; font-size: 1.2rem" scrollamount="3">News and Alerts will be
+						here......</marquee>
+				</div>
+				<div class="text-container">
+
+                    
+                
+                
+				<div id="map" style="width: 100%; min-height: 650px;"></div>
+
+<script>
+    var singletrain = [];
+    var markArr = [];
+	var line = "";
+	var orangeArr = [];
+	$(document).ready(function(){
+        $("#atrain").click(function(){
+			initMap();
+		});
+		$.get("http://lapi.transitchicago.com/api/1.0/ttfollow.aspx?key=d37555ccc09141848543ab21e287b560&runnumber=@ViewBag.id&outputType=JSON", function(response){
+            line = response.ctatt.eta[0].rt
+			
+			if(response != null){
+                for(var i = 0; i<response.ctatt.eta.length; i++){
+                    var time = response.ctatt.eta[i].arrT.slice(11,19);
+                    singletrain.push({
+                        line: response.ctatt.eta[i].rt,
+                        nextStationId: response.ctatt.eta[i].staId,
+                        nextStopId: response.ctatt.eta[i].stpId,
+                        nextStationName: response.ctatt.eta[i].staNm,
+                        arrTime: time,
+                        destinationName: response.ctatt.eta[i].destNm,
+                        destinationId: response.ctatt.eta[i].destSt
+                    })
+				}
+                console.log(singletrain.length);
+                for(var j=0; j<singletrain.length; j++){
+                    $("#trains").append("<tr><td>" + singletrain[j].nextStationName + "</td><td>" + singletrain[j].arrTime + "</td><td>" + singletrain[j].destinationName + "</td>");
+                }
+				var latitude = parseFloat(response.ctatt.position.lat);
+				var longitude = parseFloat(response.ctatt.position.lon);
+				var point = {coords: { lat: latitude, lng: longitude },
+                			 iconImage: 'http://kstyles.altervista.org/publish/publish/web/images/2train.png',
+                			 content: "You are here"}
+				orangeArr.push(point);
+			}  	
+		});
+        
+    });
+	
+    	function initMap() {
+			console.log(line);
+		var codingDojo = { lat: 41.897184, lng: -87.635235 }
+		var map = new google.maps.Map(
+			document.getElementById('map'), { zoom: 12, center: codingDojo }
+			);
+		// var marker = new google.maps.Marker({ position: codingDojo, map: map });
+		google.maps.event.addListener(map, 'click', function (event) {
+                    // Add marker
+                    //addMarker({ coords: event.latLng });
+                });
+		
+		var markArr = [];
+			 
+			   
+			 
+        
+
+		
+            
+            function addMarker(props, timeout) {
+				window.setTimeout(function() {
+                var tmarker = new google.maps.Marker({
+                    position: props.coords,
+                    map: map,
+					animation: google.maps.Animation.DROP
+                });
+
+                //   // Check for customicon
+                if (props.iconImage) {
+					
+                    tmarker.setIcon(props.iconImage);
+                }
+
+                //   // Check content
+                if (props.content) {
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: props.content
+                    });
+
+                    tmarker.addListener('click', function () {
+                        infoWindow.open(map, tmarker);
+                    });
+                }
+				}, timeout);
+			}
+			function addMarker2(props) {
+                var tmarker = new google.maps.Marker({
+                    position: props.coords,
+					map: map,
+					icon:{
+						url: 'https://cdn3.iconfinder.com/data/icons/map/500/communication-256.png',
+						size: new google.maps.Size(40,40),
+						origin: new google.maps.Point(0, 0),
+						anchor: new google.maps.Point(6, 15),
+						scaledSize: new google.maps.Size(15, 15),
+					}
+				});
+				var infoWindow = new google.maps.InfoWindow({
+					content: props.content,
+					pixelOffset : new google.maps.Size(-12, 3)
+				});
+				tmarker.addListener('click', function(){
+					infoWindow.open(map, tmarker);
+				});
+			}
+
+		var YellowLineCoordinates = [
+			{ lat: 42.019068, lng: -87.672825, name: "Howard" },
+			{ lat: 42.019860, lng: -87.673855 },
+			{ lat: 42.020984, lng: -87.675883 },
+			{ lat: 42.021247, lng: -87.676580 },
+			{ lat: 42.021581, lng: -87.678072 },
+			{ lat: 42.021693, lng: -87.679187 },
+			{ lat: 42.026846, lng: -87.747583, name: "Oakton-Skokie" },
+			{ lat: 42.039597, lng: -87.752307, name: "Dempster-Skokie" }
+		];
+		var PurpleLineCoordinates = [
+			{ lat: 42.073605, lng: -87.690923, name: "Linden" },
+			{ lat: 42.063918, lng: -87.685612, name: "Central" },
+			{ lat: 42.058241, lng: -87.683427, name: "Noyes" },
+			{ lat: 42.054233, lng: -87.683655, name: "Foster" },
+			{ lat: 42.048401, lng: -87.683483, name: "Davis" },
+			{ lat: 42.041686, lng: -87.681639, name: "Dempster" },
+			{ lat: 42.033511, lng: -87.679561, name: "Main" },
+			{ lat: 42.027577, lng: -87.678361, name: "South Blvd" },
+			{ lat: 42.018844, lng: -87.672690, name: "Howard" },
+			{ lat: 41.965343, lng: -87.657954, name: "Wilson" },
+			{ lat: 41.939732, lng: -87.653440, name: "Belmont" },
+			{ lat: 41.936289, lng: -87.653273, name: "Wellington" },
+			{ lat: 41.932848, lng: -87.653147, name: "Diversey" },
+			{ lat: 41.925400, lng: -87.652937, name: "Fullerton" },
+			{ lat: 41.918265, lng: -87.652642, name: "Armitage" },
+			{ lat: 41.910379, lng: -87.638764, name: "Sedgwick" },
+			{ lat: 41.895980, lng: -87.635736, name: "Chicago" },
+			{ lat: 41.888874, lng: -87.633970, name: "Merchandise Mart" },
+			{ lat: 41.885743, lng: -87.631489, name: "Clark/Lake" },
+			{ lat: 41.882611, lng: -87.626148, name: "Washington/Wabash" },
+			{ lat: 41.879574, lng: -87.626148, name: "Adams/Wabash" },
+			{ lat: 41.876882, lng: -87.628798, name: "Harold Washington Library-State/Van Buren" },
+			{ lat: 41.876882, lng: -87.631741, name: "LaSalle/VanBuren" },
+			{ lat: 41.878729, lng: -87.633802, name: "Quincy" },
+			{ lat: 41.882612, lng: -87.633885, name: "Washington/Wells" },
+			{ lat: 41.888874, lng: -87.633970, name: "Merchandise Mart" },
+		];
+		var BrownLineCoordinates = [
+			{ lat: 41.967640, lng: -87.712863, name: "Kimball" },
+			{ lat: 41.966077, lng: -87.708699, name: "Kedzie" },
+			{ lat: 41.966201, lng: -87.701592, name: "Francisco" },
+			{ lat: 41.966201, lng: -87.694105, name: "Rockwell" },
+			{ lat: 41.966235, lng: -87.688450, name: "Western" },
+			{ lat: 41.966425, lng: -87.678751, name: "Damen" },
+			{ lat: 41.961733, lng: -87.675234, name: "Montrose" },
+			{ lat: 41.954490, lng: -87.675017, name: "Irving Park" },
+			{ lat: 41.947245, lng: -87.674805, name: "Addison" },
+			{ lat: 41.943796, lng: -87.663520, name: "South Port" },
+			{ lat: 41.939732, lng: -87.653440, name: "Belmont" },
+			{ lat: 41.936289, lng: -87.653273, name: "Wellington" },
+			{ lat: 41.932848, lng: -87.653147, name: "Diversey" },
+			{ lat: 41.925400, lng: -87.652937, name: "Fullerton" },
+			{ lat: 41.918265, lng: -87.652642, name: "Armitage" },
+			{ lat: 41.910379, lng: -87.638764, name: "Sedgwick" },
+			{ lat: 41.895980, lng: -87.635736, name: "Chicago" },
+			{ lat: 41.888874, lng: -87.633970, name: "Merchandise Mart" },
+			{ lat: 41.885743, lng: -87.631489, name: "Clark/Lake" },
+			{ lat: 41.882611, lng: -87.626148, name: "Washington/Wabash" },
+			{ lat: 41.879574, lng: -87.626148, name: "Adams/Wabash" },
+			{ lat: 41.876882, lng: -87.628798, name: "Harold Washington Library-State/Van Buren" },
+			{ lat: 41.876882, lng: -87.631741, name: "LaSalle/VanBuren" },
+			{ lat: 41.878729, lng: -87.633802, name: "Quincy" },
+			{ lat: 41.882612, lng: -87.633885, name: "Washington/Wells" },
+			{ lat: 41.888874, lng: -87.633970, name: "Merchandise Mart" },
+		];
+		var RedLineCoordinates = [
+			{ lat: 42.018844, lng: -87.672690, name: "Howard" },
+			{ lat: 42.015950, lng: -87.669168, name: "Jarvis" },
+			{ lat: 42.008331, lng: -87.665907, name: "Moyse" },
+			{ lat: 42.001158, lng: -87.661145, name: "Loyola" },
+			{ lat: 41.993816, lng: -87.659212, name: "Granville" },
+			{ lat: 41.990279, lng: -87.659068, name: "Thorndale" },
+			{ lat: 41.983516, lng: -87.658878, name: "Bryn Mawr" },
+			{ lat: 41.978022, lng: -87.658730, name: "Berwyn" },
+			{ lat: 41.973427, lng: -87.658581, name: "Argyle" },
+			{ lat: 41.969090, lng: -87.658532, name: "Lawernce" },
+			{ lat: 41.965343, lng: -87.657954, name: "Wilson" },
+			{ lat: 41.953796, lng: -87.654948, name: "Sheridan" },
+			{ lat: 41.947472, lng: -87.653662, name: "Addison" },
+			{ lat: 41.939732, lng: -87.653440, name: "Belmont" },
+			{ lat: 41.925400, lng: -87.652937, name: "Fullerton" },
+			{ lat: 41.910581, lng: -87.649064, name: "North/Clybourn" },
+			{ lat: 41.903903, lng: -87.632131, name: "Clark/Division" },
+			{ lat: 41.891682, lng: -87.628073, name: "Grand/State" },
+			{ lat: 41.880681, lng: -87.627741, name: "Monroe" },
+			{ lat: 41.878214, lng: -87.627640, name: "Jackson" },
+			{ lat: 41.874217, lng: -87.627497, name: "Harrison" },
+			{ lat: 41.867434, lng: -87.627436, name: "Roosevelt" },
+			{ lat: 41.853730, lng: -87.631156, name: "Cermak-Chinatwon" },
+			{ lat: 41.831329, lng: -87.630669, name: "Sox-35th" },
+			{ lat: 41.810328, lng: -87.631034, name: "47th" },
+			{ lat: 41.795794, lng: -87.631197, name: "Garfield" },
+			{ lat: 41.780922, lng: -87.630994, name: "63rd St" },
+			{ lat: 41.769020, lng: -87.625830, name: "69th" },
+			{ lat: 41.750663, lng: -87.625218, name: "79th" },
+			{ lat: 41.735567, lng: -87.624786, name: "87th" },
+			{ lat: 41.722429, lng: -87.624462, name: "95th/Dan Ryan" }
+		];
+		var OrangeLineCoordinates = [
+		{ lat: 41.7866, lng: -87.7379, name: "Midway"},
+		{ lat: 41.7998, lng: -87.7245, name: "Pulaski"},
+		{ lat: 41.8042, lng: -87.7044, name: "Kedzie"},
+		{ lat: 41.8045, lng: -87.684, name: "Western"},
+		{ lat: 41.8294, lng: -87.6806, name: "35th/Archer"},
+		{ lat: 41.8392, lng: -87.6653, name: "Ashland"},
+		{ lat: 41.8468, lng: -87.6481, name: "Halsted"},
+		{ lat: 41.8674, lng: -87.6266, name: "Roosevelt"},
+		{ lat: 41.8795, lng: -87.626, name: "Adams/Wabash"},
+		{ lat: 41.8832, lng: -87.6262, name: "Washington/Wabash"},
+		{ lat: 41.8857, lng: -87.6278, name: "State/Lake"}
+		];
+		var PinkLineCoordinates = [
+			{lat: 41.8518, lng: -87.7567, name: "54th/Cermak"},
+			{lat: 41.8518, lng: -87.7453, name: "Cicero"},
+			{lat: 41.8537, lng: -87.7243, name: "Pulaski"},
+			{lat: 41.8538, lng: -87.7333, name: "Kostner"},
+			{lat: 41.8538, lng: -87.7148, name: "Central Park"},
+			{lat: 41.854, lng: -87.7054, name: "Kedzie"},
+			{lat: 41.8541, lng: -87.6948, name: "California"},
+			{lat: 41.8542, lng: -87.6851, name: "Western"},
+			{lat: 41.8545, lng: -87.676, name: "Damen"},
+			{lat: 41.8579, lng: -87.6691, name: "18th"},
+			{lat: 41.8716, lng: -87.6695, name: "Polk"},
+			{lat: 41.8853, lng: -87.667, name: "Ashland"},
+			{lat: 41.8856, lng: -87.6522, name: "Morgan"},
+			{lat: 41.8857, lng: -87.6418, name: "Clinton"},
+			{ lat: 41.882612, lng: -87.633885, name: "Washington/Wells" },
+			{ lat: 41.878729, lng: -87.633802, name: "Quincy" },
+			{ lat: 41.876882, lng: -87.631741, name: "LaSalle/VanBuren" },
+			{ lat: 41.876882, lng: -87.628798, name: "Harold Washington Library-State/Van Buren" },
+			{lat: 41.8795, lng: -87.626, name: "Adams/Wabash"},
+			{lat: 41.8832, lng: -87.6262, name: "Washington/Wabash"},
+			
+			
+			
+			{lat: 41.8857, lng: -87.6278, name: "State/Lake"},
+			{lat: 41.8857, lng: -87.6418, name: "Clinton"},
+		];
+		var BlueLineCoordinates = [
+			
+			
+			
+			
+			
+			{lat: 41.8743, lng: -87.8173, name: "Forest Park"},
+			{lat: 41.8735, lng: -87.807, name: "Harlem"},
+			{lat: 41.8721, lng: -87.7916, name: "Oak Park"},
+			{lat: 41.8708, lng: -87.7768, name: "Austin"},
+			{lat: 41.8716, lng: -87.7452, name: "Cicero"},
+			{lat: 41.8738, lng: -87.7257, name: "Pulaski"},
+			{lat: 41.8743, lng: -87.706, name: "Kedzie-Homan"},
+			{lat: 41.8755, lng: -87.6884, name: "Western"},
+			
+			
+			
+			{lat: 41.8757, lng: -87.6739, name: "Illinois Medical District"},
+			{lat: 41.8759, lng: -87.6595, name: "Racine"},
+			
+			{lat: 41.8755, lng: -87.6497, name: "UIC-Halsted"},
+			{lat: 41.8755, lng: -87.641, name: "Clinton"},
+			{lat: 41.8756, lng: -87.6317, name: "LaSalle"},
+			{lat: 41.8782, lng: -87.6293, name: "Jackson"},
+			{lat: 41.8807, lng: -87.6294, name: "Monroe"},
+			{lat: 41.8832, lng: -87.6294, name: "Washington"},
+			{lat: 41.8857, lng: -87.6309, name: "Clark/Lake"},
+			{lat: 41.8912, lng: -87.6476, name: "Grand"},
+			{lat: 41.8961, lng: -87.6552, name: "Chicago"},
+			{lat: 41.9034, lng: -87.6665, name: "Division"},
+			{lat: 41.9097, lng: -87.6774, name: "Damen"},
+			{lat: 41.9162, lng: -87.6874, name: "Western"},
+			{lat: 41.9219, lng: -87.6969, name: "California"},
+			{lat: 41.9297, lng: -87.7085, name: "Logan Square"},
+			{lat: 41.9381, lng: -87.7124, name: "Belmont"},
+			{lat: 41.9474, lng: -87.7191, name: "Addison"},
+			{lat: 41.9529, lng: -87.7292, name: "Irving Park"},
+			{lat: 41.9615, lng: -87.7436, name: "Montrose"},
+			{lat: 41.9706, lng: -87.7609, name: "Jefferson Park"},
+			
+			{lat: 41.9823, lng: -87.8089, name: "Harlem"},
+			
+			{lat: 41.9842, lng: -87.838, name: "Cumberland"},
+			{lat: 41.9835, lng: -87.8594, name: "Rosemont"},
+			{lat: 41.9777, lng: -87.9042, name: "O'Hare"}
+		];
+		var GreenLineCoordinates = [
+
+			{lat: 41.7803, lng: -87.6059, name: "Cottage Grove"},
+			{lat: 41.7801, lng: -87.6155, name: "King Drive"},
+			
+			{lat: 41.7789, lng: -87.6442, name: "Halsted"},
+			{lat: 41.7789, lng: -87.6638, name: "Ashland/63rd"},
+			{lat: 41.7801, lng: -87.6155, name: "King Drive"},
+			
+			
+			{lat: 41.7952, lng: -87.6183, name: "Garfield"},
+			{lat: 41.8021, lng: -87.6185, name: "51st"},
+			{lat: 41.8092, lng: -87.6188, name: "47th"},
+			{lat: 41.8165, lng: -87.619, name: "43rd"},
+			{lat: 41.8217, lng: -87.6214, name: "Indiana"},
+			{lat: 41.8317, lng: -87.6258, name: "35th-Bronzeville-IIT"},
+			{lat: 41.8531, lng: -87.6264, name: "Cermak-McCormick Place"},
+			{lat: 41.8674, lng: -87.6266, name: "Roosevelt"},
+			{lat: 41.8795, lng: -87.626, name: "Adams/Wabash"},
+			{lat: 41.8832, lng: -87.6262, name: "Washington/Wabash"},
+			{lat: 41.8857, lng: -87.6278, name: "State/Lake"},
+			{ lat: 41.885743, lng: -87.631489, name: "Clark/Lake" },
+			{lat: 41.8857, lng: -87.6418, name: "Clinton"},
+			{lat: 41.8856, lng: -87.6522, name: "Morgan"},
+			{lat: 41.8853, lng: -87.667, name: "Ashland"},
+			{lat: 41.8842, lng: -87.6962, name: "California"},
+			{lat: 41.8843, lng: -87.7062, name: "Kedzie"},
+			{lat: 41.8849, lng: -87.7165, name: "Conservatory"},
+			
+			{lat: 41.8854, lng: -87.7254, name: "Pulaski"},
+			
+			
+			
+			{lat: 41.8865, lng: -87.7447, name: "Cicero"},
+			{lat: 41.8872, lng: -87.755, name: "Laramie"},
+			{lat: 41.8874, lng: -87.7656, name: "Central"},
+			{lat: 41.8873, lng: -87.7741, name: "Austin"},
+			{lat: 41.8872, lng: -87.7837, name: "Ridgeland"},
+			
+			{lat: 41.887, lng: -87.7938, name: "Oak Park"},
+			{lat: 41.8868, lng: -87.8032, name: "Harlem/Lake"},
+			
+			
+			
+			
+		];
+		
+		var YellowLine = new google.maps.Polyline({
+			path: YellowLineCoordinates,
+			geodesic: false,
+			strokeColor: "yellow",
+			strokeOpacity: 0.8,
+			strokeWeight: 3
+		})
+		var PurpleLine = new google.maps.Polyline({
+			path: PurpleLineCoordinates,
+			geodesic: false,
+			strokeColor: "purple",
+			strokeOpacity: 0.8,
+			strokeWeight: 3
+		})
+		var BrownLine = new google.maps.Polyline({
+			path: BrownLineCoordinates,
+			geodesic: false,
+			strokeColor: "brown",
+			strokeOpacity: 0.8,
+			strokeWeight: 3
+		})
+		var RedLine = new google.maps.Polyline({
+			path: RedLineCoordinates,
+			geodesic: false,
+			strokeColor: "red",
+			strokeOpacity: 0.8,
+			strokeWeight: 3
+		})
+		var OrangeLine = new google.maps.Polyline({
+			path: OrangeLineCoordinates,
+			geodesic: false,
+			strokeColor: "orange",
+			strokeOpacity: 0.8,
+			strokeWeight: 3
+		})
+		var PinkLine = new google.maps.Polyline({
+			path: PinkLineCoordinates,
+			geodesic: false,
+			strokeColor: "pink",
+			strokeOpacity: 0.8,
+			strokeWeight: 3
+		})
+		var BlueLine = new google.maps.Polyline({
+			path: BlueLineCoordinates,
+			geodesic: false,
+			strokeColor: "blue",
+			strokeOpacity: 0.8,
+			strokeWeight: 3
+		})
+		var GreenLine = new google.maps.Polyline({
+			path: GreenLineCoordinates,
+			geodesic: false,
+			strokeColor: "green",
+			strokeOpacity: 0.8,
+			strokeWeight: 3
+		})
+		
+		var YlwMrk = [];
+		var PrpMrk = [];
+		var BrnMrk = [];
+		var RedMrk = [];
+		var OrgMrk = [];
+		var PnkMrk = [];
+		var BluMrk = [];
+		var GrnMrk = [];
+
+
+
+		for(var i = 0; i < YellowLineCoordinates.length; i++){
+			if(YellowLineCoordinates[i].name){
+				var point = {coords: {lat: YellowLineCoordinates[i].lat, lng:YellowLineCoordinates[i].lng},
+							iconImage: 'http://kstyles.altervista.org/publish/publish/web/images/4dot.png',
+							content: "<p>" + YellowLineCoordinates[i].name + "</p"
+			}
+
+			YlwMrk.push(point);
+			}
+		
+		}
+		if(line == "Yellow Line"){
+			for(var i = 0; i < YlwMrk.length; i++){
+				addMarker2(YlwMrk[i]);
+				
+			}addMarker(orangeArr[0]);
+		}
+		
+
+		for(var i = 0; i < PurpleLineCoordinates.length; i++){
+			if(PurpleLineCoordinates[i].name){
+				var point = {coords: {lat: PurpleLineCoordinates[i].lat, lng:PurpleLineCoordinates[i].lng},
+							iconImage: 'http://kstyles.altervista.org/publish/publish/web/images/4dot.png',
+							content: "<p>" + PurpleLineCoordinates[i].name + "</p"
+			}
+
+			PrpMrk.push(point);
+			}
+			
+		}
+		if(line == "Purple Line"){
+
+		
+		for(var i = 0; i < PrpMrk.length; i++){
+			addMarker2(PrpMrk[i]);
+			
+		}addMarker(orangeArr[0]);
+		}
+
+		for(var i = 0; i < BrownLineCoordinates.length; i++){
+			if(BrownLineCoordinates[i].name){
+				var point = {coords: {lat: BrownLineCoordinates[i].lat, lng:BrownLineCoordinates[i].lng},
+							iconImage: 'http://kstyles.altervista.org/publish/publish/web/images/4dot.png',
+							content: "<p>" + BrownLineCoordinates[i].name + "</p"
+			}
+
+			BrnMrk.push(point);
+			}
+			
+		}
+		if(line == "Brown Line"){
+			
+		
+		for(var i = 0; i < BrnMrk.length; i++){
+			addMarker2(BrnMrk[i]);
+			
+		}addMarker(orangeArr[0]);
+		}
+
+			for(var i = 0; i < RedLineCoordinates.length; i++){
+			if(RedLineCoordinates[i].name){
+				var point = {coords: {lat: RedLineCoordinates[i].lat, lng:RedLineCoordinates[i].lng},
+							iconImage: 'http://kstyles.altervista.org/publish/publish/web/images/4dot.png',
+							content: "<p>" + RedLineCoordinates[i].name + "</p"
+			}
+
+			RedMrk.push(point);
+			}
+			
+		}
+		if(line =="Red Line"){
+		for(var i = 0; i < RedMrk.length; i++){
+			addMarker2(RedMrk[i]);
+			
+		}addMarker(orangeArr[0]);
+		}
+
+		for(var i = 0; i < OrangeLineCoordinates.length; i++){
+			if(OrangeLineCoordinates[i].name){
+				var point = {coords: {lat: OrangeLineCoordinates[i].lat, lng:OrangeLineCoordinates[i].lng},
+							iconImage: 'http://kstyles.altervista.org/publish/publish/web/images/4dot.png',
+							content: "<p>" + OrangeLineCoordinates[i].name + "</p"
+			}
+
+			OrgMrk.push(point);
+			}
+			
+		}
+		if(line == "Orange Line"){
+
+		
+		for(var i = 0; i < OrgMrk.length; i++){
+			addMarker2(OrgMrk[i]);
+			
+		}addMarker(orangeArr[0]);
+		}
+
+		for(var i = 0; i < PinkLineCoordinates.length; i++){
+			if(PinkLineCoordinates[i].name){
+				var point = {coords: {lat: PinkLineCoordinates[i].lat, lng:PinkLineCoordinates[i].lng},
+							iconImage: 'http://kstyles.altervista.org/publish/publish/web/images/4dot.png',
+							content: "<p>" + PinkLineCoordinates[i].name + "</p"
+			}
+
+			PnkMrk.push(point);
+			}
+			
+		}
+		if(line == "Pink Line"){
+
+		
+		for(var i = 0; i < PnkMrk.length; i++){
+			addMarker2(PnkMrk[i]);
+			
+		}addMarker(orangeArr[0]);
+		}
+
+		for(var i = 0; i < BlueLineCoordinates.length; i++){
+			if(BlueLineCoordinates[i].name){
+				var point = {coords: {lat: BlueLineCoordinates[i].lat, lng:BlueLineCoordinates[i].lng},
+							iconImage: 'http://kstyles.altervista.org/publish/publish/web/images/4dot.png',
+							content: "<p>" + BlueLineCoordinates[i].name + "</p"
+			}
+
+			BluMrk.push(point);
+			}
+			
+		}
+		if(line == "Blue Line"){
+
+		
+		for(var i = 0; i < BluMrk.length; i++){
+			addMarker2(BluMrk[i]);
+			
+		}addMarker(orangeArr[0]);
+		}
+
+		for(var i = 0; i < GreenLineCoordinates.length; i++){
+			if(GreenLineCoordinates[i].name){
+				var point = {coords: {lat: GreenLineCoordinates[i].lat, lng:GreenLineCoordinates[i].lng},
+							iconImage: 'http://kstyles.altervista.org/publish/publish/web/images/4dot.png',
+							content: "<p>" + GreenLineCoordinates[i].name + "</p"
+			}
+
+			GrnMrk.push(point);
+			}
+			
+		}
+		if(line == "Green Line"){
+
+		
+		for(var i = 0; i < GrnMrk.length; i++){
+			addMarker2(GrnMrk[i]);
+			
+		}addMarker(orangeArr[0]);
+		}
+		
+		if(line == "Purple Line"){		PurpleLine.setMap(map);
+}
+		if(line == "Yellow Line"){YellowLine.setMap(map);}
+		if(line == "Blue Line"){		BlueLine.setMap(map);
+}
+		if(line == "Red Line"){		RedLine.setMap(map);
+}
+		if(line == "Brown Line"){		BrownLine.setMap(map);
+}
+		if(line == "Orange Line"){		OrangeLine.setMap(map);
+}
+		if(line == "Pink Line"){		PinkLine.setMap(map);
+}
+		if(line == "Green Line"){		GreenLine.setMap(map);
+}
+
+
+		
+		addMarker(orangeArr[0], i * 200);
+		
+            
+            function addMarker(props, timeout) {
+				window.setTimeout(function() {
+                var tmarker = new google.maps.Marker({
+                    position: props.coords,
+                    map: map,
+					animation: google.maps.Animation.DROP
+                });
+
+                //   // Check for customicon
+                if (props.iconImage) {
+					
+                    tmarker.setIcon(props.iconImage);
+                }
+
+                //   // Check content
+                if (props.content) {
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: props.content
+                    });
+
+                    tmarker.addListener('click', function () {
+                        infoWindow.open(map, tmarker);
+                    });
+                }
+				}, timeout);
+			}
+	}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmMtYz3uY9Di4Fhyj18uWAg3EWE5e5W3s">
+
+</script>
+
+

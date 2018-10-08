@@ -1,0 +1,179 @@
+<script>
+	$(document).ready(function(){
+		$("#purple").click(function(){
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=p&outputType=JSON", function(response){
+					$("#trains").empty();
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<button>" + response.ctatt.route[0].train[i].rn + "</button>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}	
+			});
+		});
+		$("#yellow").click(function(){
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=Y&outputType=JSON", function(response){
+					$("#trains").empty();
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+							console.log(response.ctatt.route[0].train[i].nextStaNm);
+							$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+					
+			});
+		});
+		$("#brown").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=brn&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+		$("#red").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=red&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+		$("#blue").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=blue&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+		$("#green").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=g&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+		$("#orange").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=org&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){						
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+		$("#pink").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=pink&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+	});	
+</script>
+
+<div class="navbar">
+	<nav class="nav__mobile"></nav>
+	<div class="container">
+		<div class="navbar__inner">
+			<a href="#" class="navbar__logo">TrainTracker</a>
+			<nav class="navbar__menu">
+				<ul>
+					<li><a href="/">Home</a></li>
+					<li><a href="/Dashboard">Dashboard</a></li>
+				</ul>
+			</nav>
+			<div class="navbar__menu-mob"><a href="" id='toggle'><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+						<path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+						 class=""></path>
+					</svg></a></div>
+		</div>
+	</div>
+</div>
+<!-- Page content -->
+<div class="app">
+	<div class="container">
+		<div class="app__inner">
+			<div class="app__menu">
+				<ul class="vMenu">
+					<button id="purple" class="purplebtn">Purple</button>
+					<button id="yellow" class="yellowbtn">Yellow</button>
+					<button id="brown" class="brownbtn">Brown</button>
+					<button id="red" class="redbtn">Red</button>
+					<button id="blue" class="bluebtn">Blue</button>
+					<button id="green" class="greenbtn">Green</button>
+					<button id="orange" class="orangebtn">Orange</button>
+					<button id="pink" class="pinkbtn">Pink</button>
+				</ul>
+				<p id="routeName"></p>
+				<p id="routeStation"></p>
+				<div id="trains">
+					
+				</div>
+			</div>
+			<div class="app__main">
+				<div class="text-container">
+					<h3 class="app__main__title">This is the main area</h3>
+					<p>Write or do whatever you want here!</p>
+					<div class="img-magnifier-container">
+						<!-- See magnify.js -->
+						<!-- Mess with the magnifying glass in site.css - .img-magnifier-glass -->
+						<img id="myimage" src="~/images/test.png" style="width:500px; height:auto;">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

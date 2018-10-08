@@ -1,0 +1,416 @@
+<script>
+	$(document).ready(function(){
+		$("#purple").click(function(){
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=p&outputType=JSON", function(response){
+					$("#trains").empty();
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						var run = response.ctatt.route[0].train[i].rn;
+						$("#trains").append("<button id='" + run + "'>" + run + "</button>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						$('"' + '#' + run + '"').click(function(){
+							$.get("http://lapi.transitchicago.com/api/1.0/ttfollow.aspx?key=d37555ccc09141848543ab21e287b560&runnumber=" + run + "&outputType=JSON", function(data){
+								console.log(data.ctatt.eta[0].rn);
+							});
+								
+						});
+						}
+					}
+						
+				});
+		});
+		$("#yellow").click(function(){
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=Y&outputType=JSON", function(data){
+					$("#trains").empty();
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+							console.log(response.ctatt.route[0].train[i].nextStaNm);
+							$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+					
+			});
+		});
+		$("#brown").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=brn&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+		$("#red").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=red&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+		$("#blue").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=blue&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+		$("#green").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=g&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+		$("#orange").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=org&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){						
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+		$("#pink").click(function(){
+				$("#trains").empty();
+				$.get("http://lapi.transitchicago.com/api/1.0/ttpositions.aspx?key=d37555ccc09141848543ab21e287b560&rt=pink&outputType=JSON", function(response){
+					if(response.ctatt.route[0].train.length > 0){
+						for(var i = 0; i<response.ctatt.route[0].train.length; i++){
+						console.log(response.ctatt.route[0].train[i].nextStaNm);
+						$("#trains").append("<h4>" + response.ctatt.route[0].train[i].rn + "</h4>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].destNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].nextStaNm + "</p>");
+						$("#trains").append("<p>" + response.ctatt.route[0].train[i].arrT + "</p>");
+						$("#trains").append("<br><br>");
+						}
+					}
+			});
+		});
+	});	
+</script>
+
+<div class="navbar">
+	<nav class="nav__mobile"></nav>
+	<div class="container">
+		<div class="navbar__inner">
+			<a href="/" style="display: flex; align-items: center;" class="navbar__logo"><img height="42px" src="~/images/logo.svg">TrainTracker</a>
+			<nav class="navbar__menu">
+				<ul>
+					<li><a href="/">Home</a></li>
+					<li><a href="/Dashboard">Dashboard</a></li>
+				</ul>
+			</nav>
+			<div class="navbar__menu-mob"><a href="" id='toggle'><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+						<path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+						 class=""></path>
+					</svg></a></div>
+		</div>
+	</div>
+</div>
+<!-- Page content -->
+<div class="app app-custom">
+	<div class="container-dashboard">
+		<div class="app__inner" style="width: 100%;">
+			<div class="app__menu">
+				<div id='LineSelect'>
+					<div class="vMenu vMenuTop">
+						<p class="etched-text">Display: <span style="color: darkslategray;">{{ line }}</span></p>
+					</div>
+					<ul class="vMenu vMenuCustom">
+						<p class="etched-text" style="color: darkslategray;">Select an option:</p>
+						<li style="display: flex;">
+							<div>
+								<input value="All Lines" checked name="radiovalue" type="radio" id="AllLines" v-model="line" />
+								<label for="AllLines">All Lines</label>
+								<input value="Blue Line" name="radiovalue" type="radio" id="BlueLine" v-model="line" />
+								<label for="BlueLine">Blue Line</label>
+								<input value="Brown Line" name="radiovalue" type="radio" id="BrownLine" v-model="line" />
+								<label for="BrownLine">Brown Line</label>
+								<input value="Green Line" name="radiovalue" type="radio" id="GreenLine" v-model="line" />
+								<label for="GreenLine">Green Line</label>
+								<input value="Orange Line" name="radiovalue" type="radio" id="OrangeLine" v-model="line" />
+								<label for="OrangeLine">Orange Line</label>
+							</div>
+							<div>
+								<input value="Pink Line" name="radiovalue" type="radio" id="PinkLine" v-model="line" />
+								<label for="PinkLine">Pink Line </label>
+								<input value="Purple Line" name="radiovalue" type="radio" id="PurpleLine" v-model="line" />
+								<label for="PurpleLine">Purple Line</label>
+								<input value="Red Line" name="radiovalue" type="radio" id="RedLine" v-model="line" />
+								<label for="RedLine">Red Line</label>
+								<input value="Yellow Line" name="radiovalue" type="radio" id="YellowLine" v-model="line" />
+								<label for="YellowLine">Yellow Line</label>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<ul class="vMenu vMenuCustom">
+					<p class="etched-text" style="color: darkslategray;">Set Alerts:</p>
+					<li><a href="#" class="vMenu--active">Active page</a></li>
+					<li><a href="#">Second page</a></li>
+					<li><a href="#">Third page</a></li>
+					<li><a href="#">Fourth page</a></li>
+					<li><a href="#">Fifth page</a></li>
+				</ul>
+				<div class="vMenu vMenuCustom">
+					<p class="etched-text" style="color: darkslategray;">Magnify:</p>
+					<label class="switch">
+						<input type="checkbox">
+						<span class="slider round"></span>
+					</label>
+				</div>
+			</div>
+			<div class="app__main">
+				<div class="text-container">
+					<h3 class="app__main__title">This is the main area</h3>
+					<p>Write or do whatever you want here!</p>
+					<div class="img-magnifier-container">
+						<!-- See magnify.js -->
+						<!-- Mess with the magnifying glass in site.css - .img-magnifier-glass -->
+                        <!-- Train Station Overlay -->
+                        <!-- <div class="train-overlay" style="position: absolute"></div> -->
+                        <!-- Path Overlay -->
+                        <div class="path-overlay" style="position: absolute">
+                            <svg width='500' height='700'>
+                                <path class="blue-line" d="M28,217 32,215 43,224 63,214 90,214 150,214 172,217 198,233 208,233 257,285 259,309 342,376 357,387 372,387 372,405 238,405 225,412 212,410 198,409 190,413 120,403" stroke="blue" stroke-width="3" fill="none"></path>
+                                <path class="yellow-line" d="M221,119 228,143 230,147 232,149 306,150 319,158" stroke="yellow" stroke-width="3" fill="none"></path>
+                                <path class="purple-line" d="M299,67 305,82 308,91 308,99 308,110 310,120 312,130 313,140 321,155" stroke="purple" stroke-width="3" fill="none"></path>
+                                <path class="expurple-line" d="M321,155 330,170 330,180 334,190 334,242 334,263 340,272 340,338 360,338 362,341 366,345 366,370 366,400 380,400 380,382 366,382" stroke="purple" stroke-width="3" fill="none" stroke-dasharray="2"></path>
+                                <path class="red-line" d="M323,150 329,159 333,167 333,176 339,187 339,244 339,262 345,270 345,345 353,355 376,355 376,370 376,400 373,420 373,512 371,516 371,573 374,583 374,678" stroke="red" stroke-width="3" fill="none"></path>
+                                <path class="exred-line" d="M373,433 380,438 380,495 383,500 383,551 363,551 361,552 359,555 359,563 316,563" stroke="red" stroke-width="3" fill="none" stroke-dasharray="2"></path>
+                                <path class="green-line" d="M130,381 210,381 270,385 278,385 298,384 320,382 340,382 383,382 383,420 383,432 385,442 385,492 389,499 389,550 384,556 364,556 363,558 363,565 362,568 315,568" stroke="green" stroke-width="3" fill="none"></path>
+                                <path class="green-line" d="M389,550 389,568 412,568" stroke="green" stroke-width="3" fill="none"></path>
+                                <path class="orange-line" d="M222,550 222,536 252,521 294,521 297,518 297,497 290,486 345,447 360,432 380,432 380,405 370,398 370,383 380,383 380,405" stroke="orange" stroke-width="3" fill="none"></path>
+                                <path class="brown-line" d="M257,237 257,243 311,243 311,284 335,284 335,336 340,343 360,343 362,346 363,404 383,404 383,380 363,380" stroke="brown" stroke-width="3" fill="none"></path>
+                                <path class="pink-line" d="M198,441 215,441 227,440 310,440 312,438 313,436 313,390 315,388 317,387 367,387 380,387 380,400 367,400 367,387" stroke="pink" stroke-width="3" fill="none"></path>
+                            </svg>
+                            <div class="blue" style="position: absolute; top: -0.5rem; left: -0.5rem; width: 1rem; height: 1rem; background-color: blue"></div>
+                            <div class="yellow" style="position: absolute; top: -0.5rem; left: -0.5rem; width: 1rem; height: 1rem; background-color: yellow"></div>
+                            <div class="purple" style="position: absolute; top: -0.5rem; left: -0.5rem; width: 1rem; height: 1rem; background-color: purple"></div>
+                            <div class="expurple" style="position: absolute; top: -0.5rem; left: -0.5rem; width: 1rem; height: 1rem; background-color: purple"></div>
+                            <div class="red" style="position: absolute; top: -0.5rem; left: -0.5rem; width: 1rem; height: 1rem; background-color: red"></div>
+                            <div class="green" style="position: absolute; top: -0.5rem; left: -0.5rem; width: 1rem; height: 1rem; background-color: green"></div>
+                            <div class="orange" style="position: absolute; top: -0.5rem; left: -0.5rem; width: 1rem; height: 1rem; background-color: orange"></div>
+                            <div class="pink" style="position: absolute; top: -0.5rem; left: -0.5rem; width: 1rem; height: 1rem; background-color: pink"></div>
+                        </div>
+						<img id="myimage" src="~/images/test.png" style="width:500px; height:auto;">
+					</div>
+        </div>
+				<div class="vMenu vMenuTop" style="width: 100%;">
+					<marquee class="etched-text" style="color: red; font-size: 1.2rem" scrollamount="3">News and Alerts will be
+						here......</marquee>
+				</div>
+				<img id="myimage" src="~/images/test.png" style="width:100%; height:auto; margin-top: 15px;">
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="~/lib/animejs/anime.min.js"></script>
+<script>
+    function sanX (x) {
+        return 1 - ((x - 41.7) / 0.4 ) + 0.02;
+    }
+
+    function sanY (y) {
+        return (y - -87.93) / 0.4;
+    }
+
+    let dataPoints = [];
+
+    let colorDict = {
+        "red": "red",
+        "blue": "blue",
+        "g": "green",
+        "brn": "brown",
+        "p": "purple",
+        "pexp": "purple",
+        "y": "yellow",
+        "pnk": "pink",
+        "o": "orange"
+    }
+
+    function getStops(line, color) {
+    $.ajax({
+        url: `https://data.cityofchicago.org/resource/8mj8-j3c4.json?${line}=true`,
+        data: {
+        "$limit" : 5000,
+        "$$app_token" : "9uAjCkuKb3w9w6gTt6iT0Lv2p"
+        }
+    }).done(function(data) {
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+            let coor = data[i].location.coordinates;
+            coor[1] = parseFloat(sanX(coor[1]) * 700).toFixed(2);
+            coor[0] = parseFloat(sanY(coor[0]) * 500).toFixed(2);
+            coor[2] = color;
+            dataPoints.push(coor);
+            }
+            if(color == "pink") {
+            makePoints(dataPoints);
+            }
+            console.log(dataPoints);
+        })
+    };
+
+    console.log(dataPoints);
+
+    function makePoints(arr) {
+        console.log(arr);
+        console.log("here");
+        let res = "<svg width='500' height='700'>";
+        for (let i = 0; i < arr.length; i++) {
+            res += `<circle cx="${Math.floor(arr[i][0])}" cy="${Math.floor(arr[i][1])}" r="5" stroke="black" stroke-width="2" fill="${arr[i][2]}" />`;
+        }
+        res += "</svg>";
+        $(".train-overlay").html(res);
+    }
+
+    function makeMap() {
+        let lines = Object.keys(colorDict);
+        for (let i = 0; i < lines.length; i++) {
+            getStops(lines[i], colorDict[lines[i]]);
+        }
+    }
+
+    makeMap();
+
+    var path = anime.path('.blue-line');
+
+    anime({
+    targets: '.blue',
+    translateX: path('x'),
+    translateY: path('y'),
+    rotate: path('angle'),
+    duration: 10000,
+    loop: true,
+    easing: 'linear'
+    });
+
+    var path = anime.path('.yellow-line');
+
+    anime({
+    targets: '.yellow',
+    translateX: path('x'),
+    translateY: path('y'),
+    rotate: path('angle'),
+    duration: 10000,
+    loop: true,
+    easing: 'linear'
+    });
+
+    var path = anime.path('.purple-line');
+
+    anime({
+    targets: '.purple',
+    translateX: path('x'),
+    translateY: path('y'),
+    rotate: path('angle'),
+    duration: 10000,
+    loop: true,
+    easing: 'linear'
+    });
+
+    var path = anime.path('.expurple-line');
+
+    anime({
+    targets: '.expurple',
+    translateX: path('x'),
+    translateY: path('y'),
+    rotate: path('angle'),
+    duration: 10000,
+    loop: true,
+    easing: 'linear'
+    });
+
+    var path = anime.path('.red-line');
+
+    anime({
+    targets: '.red',
+    translateX: path('x'),
+    translateY: path('y'),
+    rotate: path('angle'),
+    duration: 10000,
+    loop: true,
+    easing: 'linear'
+    });
+
+    var path = anime.path('.green-line');
+
+    anime({
+    targets: '.green',
+    translateX: path('x'),
+    translateY: path('y'),
+    rotate: path('angle'),
+    duration: 10000,
+    loop: true,
+    easing: 'linear'
+    });
+
+    var path = anime.path('.orange-line');
+
+    anime({
+    targets: '.orange',
+    translateX: path('x'),
+    translateY: path('y'),
+    rotate: path('angle'),
+    duration: 10000,
+    loop: true,
+    easing: 'linear'
+    });
+
+    var path = anime.path('.pink-line');
+
+    anime({
+    targets: '.pink',
+    translateX: path('x'),
+    translateY: path('y'),
+    rotate: path('angle'),
+    duration: 10000,
+    loop: true,
+    easing: 'linear'
+    });
+</script>
